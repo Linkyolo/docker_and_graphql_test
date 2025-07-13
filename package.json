@@ -8,9 +8,13 @@
   },
   "dependencies": {
     "apollo-server": "^3.11.1",
-    "graphql": "^16.6.0"
+    "graphql": "^16.6.0",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.25"
   },
   "devDependencies": {
+    "@types/node": "^24.0.13",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.0"
   }

@@ -4,9 +4,7 @@ WORKDIR /app
 
 COPY package.json yarn.lock* package-lock.json* ./
 
-ENV NODE_ENV=development
-
-RUN yarn install || npm install
+RUN yarn install
 
 COPY . .
 
