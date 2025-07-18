@@ -1,9 +1,8 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { ApolloServer, gql } from "apollo-server";
-import { User } from "./entities/User";
 import * as dotenv from "dotenv";
-
+import { User, Workout } from './entities'
 dotenv.config();
 
 const AppDataSource = new DataSource({
@@ -15,7 +14,7 @@ const AppDataSource = new DataSource({
         database: process.env.DB_NAME || "postgres",
         synchronize: true,
         logging: false,
-        entities: [User],
+        entities: [User, Workout],
         migrations: [],
         subscribers: [],
 });
