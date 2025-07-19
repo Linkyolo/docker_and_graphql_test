@@ -1,22 +1,47 @@
-import { Workout } from '../../entities/Workout';
+import { Resolver, Query, Mutation, Arg, Int } from 'type-graphql'
+import { User, Workout } from '../../entities';
+import { AppDataSource } from '../../data-source';
+import { } from '../../entities';
 
+@Resolver(() => Workout)
 export class WorkoutResolver {
-        typeDefs = `
-    type Workout {
-      id: ID!
-      name: String!
-    }
+        private workoutRepo = AppDataSource.getRepository(Workout);
+        private userRepo = AppDataSource.getRepository(User);
 
-    extend type Query {
-      workouts: [Workout!]!
-    }
-  `;
-
-        resolvers = {
-                Query: {
-                        workouts: async (_: any, __: any, { dataSource }) => {
-                                return await dataSource.getRepository(Workout).find();
-                        },
-                },
+        @Query(() => [Workout])
+        async workouts(): Promise<Workout[]> {
+                return this.workoutRepo.find({ relations: ['user'] })
         };
+
+
+        @Query(() => Workout, { nullable: true })
+        async workout(@Arg('id') id: number): Promise<Workout | null> {
+                return this.workoutRepo.findOne({ where: { id }, relations: ['workouts'], });
+        }
+
+        @Mutation(() => Workout)
+        async createWorkout(
+                @Arg('date') date: Date,
+                @Arg('type') type: string,
+                @Arg('userId', () => Int) userId: number,
+
+        ): Promise<Workout> {
+                const user = await this.userRepo.findOneBy({ id: userId });
+                if (!user) {
+                        throw new Error('User not found')
+
+                }
+
+                const workout = new Workout()
+                workout.date = date;
+                workout.type = type;
+                workout.user = user;
+                this.workoutRepo.save(workout)
+
+                return this.workoutRepo.save(workout)
+
+
+
+
+        }
 }
