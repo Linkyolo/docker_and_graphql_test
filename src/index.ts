@@ -4,48 +4,25 @@ import { ApolloServer, gql } from "apollo-server";
 import * as dotenv from "dotenv";
 import { User, Workout } from './entities'
 dotenv.config();
+import { AppDataSource } from "./data-source";
+import { UserResolver } from "./graphql/resolvers/User";
+import { buildSchema } from "type-graphql";
+import { WorkoutResolver } from "./graphql/resolvers/Workout";
 
-const AppDataSource = new DataSource({
-        type: "postgres",
-        host: process.env.DB_HOST || "postgres",
-        port: parseInt(process.env.DB_PORT || "5432", 10),
-        username: process.env.DB_USERNAME || "postgres",
-        password: process.env.DB_PASSWORD || "postgres",
-        database: process.env.DB_NAME || "postgres",
-        synchronize: true,
-        logging: false,
-        entities: [User, Workout],
-        migrations: [],
-        subscribers: [],
-});
+async function main() {
 
-const typeDefs = gql`
-  type Query {
-    helloWorld: String
-  }
-`;
 
-const resolvers = {
-        Query: {
-                helloWorld: async () => {
-                        const users = await AppDataSource.getRepository(User).find();
-                        return `Hello, ${users.length} users in DB!`;
-                },
-        },
-};
 
-AppDataSource.initialize()
-        .then(() => {
-                const server = new ApolloServer({ typeDefs, resolvers });
+        await AppDataSource.initialize()
 
-                server.listen({ port: 3000 }).then(({ url }) => {
-                        console.log(`🚀 Server ready at ${url}`);
-                });
+        const schema = await buildSchema({
+                resolvers: [UserResolver, WorkoutResolver], validate: false,
         })
-        .catch((error: unknown) => {
-                if (error instanceof Error) {
-                        console.error("TypeORM connection error:", error.message);
-                } else {
-                        console.error("TypeORM connection error:", error);
-                }
-        });
+
+        const server = new ApolloServer({ schema })
+        const { url } = await server.listen({ port: 3000 })
+
+        console.log(`🚀 Server ready at ${url}`);
+
+}
+main().catch((err) => { console.error("Error starting server", err) })
