@@ -1,6 +1,7 @@
 import { Field, ObjectType, ID } from "type-graphql";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
 import { User } from "./User";
+import { Exercise } from "./Exercise";
 
 @ObjectType()
 @Entity()
@@ -12,8 +13,17 @@ export class Workout {
 
         @Field()
         @Column()
-        date?: Date;
+        startTime?: Date;
 
+        @Field()
+        @Column()
+        endTime?: Date;
+
+
+        //TODO:  Evaluate enum for :
+        // 1) Cardio
+        // 2) strength
+        // 3) flexibility
         @Field()
         @Column()
         type?: string;
@@ -22,4 +32,8 @@ export class Workout {
         @ManyToOne(() => User, user => user.workouts, { onDelete: 'CASCADE' })
         user: User = undefined!;
 
+
+        @Field(() => [Exercise])
+        @OneToMany(() => Exercise, exercise => exercise.workout)
+        exercises?: Exercise[]
 }
