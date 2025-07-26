@@ -16,12 +16,15 @@ export class WorkoutResolver {
 
         @Query(() => Workout, { nullable: true })
         async workout(@Arg('id') id: number): Promise<Workout | null> {
+
+                //TODO: last 20, 50, 10orkout in reverse order
                 return this.workoutRepo.findOne({ where: { id }, relations: ['workouts'], });
         }
 
         @Mutation(() => Workout)
         async createWorkout(
-                @Arg('date') date: Date,
+                @Arg('startTime') startTime: Date,
+                @Arg('endTime') endTime: Date,
                 @Arg('type') type: string,
                 @Arg('userId', () => Int) userId: number,
 
@@ -33,7 +36,8 @@ export class WorkoutResolver {
                 }
 
                 const workout = new Workout()
-                workout.date = date;
+                workout.startTime = startTime;
+                workout.endTime = endTime;
                 workout.type = type;
                 workout.user = user;
                 this.workoutRepo.save(workout)
