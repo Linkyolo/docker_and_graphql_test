@@ -3,6 +3,7 @@ version: "3.8"
 services:
   graphql-server:
     build: .
+    container_name: graphql-server
     ports:
       - "3000:3000"
     volumes:
