@@ -1,16 +1,18 @@
 import { Resolver, Query, Mutation, Arg, Int } from 'type-graphql'
-import { User, Workout } from '../../entities';
+import { User, Workout, Exercise } from '../../entities';
 import { AppDataSource } from '../../data-source';
 import { } from '../../entities';
+import { Entity } from 'typeorm';
 
 @Resolver(() => Workout)
 export class WorkoutResolver {
         private workoutRepo = AppDataSource.getRepository(Workout);
         private userRepo = AppDataSource.getRepository(User);
+        private exerciseRepo = AppDataSource.getRepository(Exercise);
 
         @Query(() => [Workout])
         async workouts(): Promise<Workout[]> {
-                return this.workoutRepo.find({ relations: ['user'] })
+                return this.workoutRepo.find({ relations: ['user', 'exercises'] })
         };
 
 
@@ -18,7 +20,7 @@ export class WorkoutResolver {
         async workout(@Arg('id') id: number): Promise<Workout | null> {
 
                 //TODO: last 20, 50, 10orkout in reverse order
-                return this.workoutRepo.findOne({ where: { id }, relations: ['workouts'], });
+                return this.workoutRepo.findOne({ where: { id }, relations: ['users'], });
         }
 
         @Mutation(() => Workout)
