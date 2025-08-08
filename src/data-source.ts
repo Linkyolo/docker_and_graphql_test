@@ -1,6 +1,6 @@
 import { User, Workout, Exercise } from "./entities";
 import { DataSource } from "typeorm";
-
+import 'dotenv/config';
 
 export const AppDataSource = new DataSource({
         type: "postgres",
