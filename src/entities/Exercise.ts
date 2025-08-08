@@ -23,6 +23,10 @@ export class Exercise {
         @Column()
         rest?: number;
 
+        @Field()
+        @Column({ type: 'varchar', default: '', nullable: true })
+        name?: string;
+
         @Field(() => Workout)
         @ManyToOne(() => Workout, workout => workout.exercises, { onDelete: 'CASCADE' })
         workout: Workout = undefined!;
