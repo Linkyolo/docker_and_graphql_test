@@ -2,7 +2,7 @@ import { Resolver, Query, Mutation, Arg, Int } from 'type-graphql'
 import { User, Workout, Exercise } from '../../entities';
 import { AppDataSource } from '../../data-source';
 import { } from '../../entities';
-import { Entity } from 'typeorm';
+import { CreateWorkoutInput } from '../inputs/workout/CreateWorkoutInput';
 
 @Resolver(() => Workout)
 export class WorkoutResolver {
@@ -25,12 +25,12 @@ export class WorkoutResolver {
 
         @Mutation(() => Workout)
         async createWorkout(
-                @Arg('startTime') startTime: Date,
-                @Arg('endTime') endTime: Date,
-                @Arg('type') type: string,
-                @Arg('userId', () => Int) userId: number,
-
+                @Arg("input") input: CreateWorkoutInput
         ): Promise<Workout> {
+
+
+                const { startTime, endTime, type, userId, exercises } = input;
+
                 const user = await this.userRepo.findOneBy({ id: userId });
                 if (!user) {
                         throw new Error('User not found')
@@ -42,12 +42,26 @@ export class WorkoutResolver {
                 workout.endTime = endTime;
                 workout.type = type;
                 workout.user = user;
-                this.workoutRepo.save(workout)
 
-                return this.workoutRepo.save(workout)
+                const exerciseEntities = exercises.map((exInput) => {
+                        const exercise = this.exerciseRepo.create(exInput);
+                        exercise.workout = workout;
+                        return exercise;
+                });
 
+                workout.exercises = exerciseEntities
 
+                return await this.workoutRepo.save(workout)
+        }
 
+        @Mutation(() => Workout)
+        async deleteWorkout(@Arg('id') id: number): Promise<Workout> {
 
+                const toBeDeleted = await this.workoutRepo.findOne({ where: { id } });
+                if (!toBeDeleted) {
+                        throw new Error('Workout not found')
+                }
+                await this.workoutRepo.delete(id)
+                return toBeDeleted;
         }
 }

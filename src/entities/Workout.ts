@@ -34,6 +34,6 @@ export class Workout {
 
 
         @Field(() => [Exercise])
-        @OneToMany(() => Exercise, exercise => exercise.workout)
+        @OneToMany(() => Exercise, exercise => exercise.workout, { onDelete: 'CASCADE', cascade: true })
         exercises?: Exercise[]
 }

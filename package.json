@@ -13,6 +13,8 @@
     "class-validator": "^0.14.2",
     "dotenv": "^17.2.1",
     "graphql": "^16.11.0",
+    "graphql-scalars": "^1.24.2",
+    "graphql-type-json": "^0.3.2",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "type-graphql": "^2.0.0-rc.2"

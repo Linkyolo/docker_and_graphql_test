@@ -17,11 +17,15 @@ export class Exercise {
 
         @Field()
         @Column()
-        reps?: string;
+        reps?: number;
 
         @Field()
         @Column()
         rest?: number;
+
+        @Field()
+        @Column()
+        sets?: number;
 
         @Field()
         @Column({ type: 'varchar', default: '', nullable: true })
