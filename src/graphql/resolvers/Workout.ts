@@ -20,7 +20,7 @@ export class WorkoutResolver {
         async workout(@Arg('id') id: number): Promise<Workout | null> {
 
                 //TODO: last 20, 50, 10orkout in reverse order
-                return this.workoutRepo.findOne({ where: { id }, relations: ['users'], });
+                return this.workoutRepo.findOne({ where: { id }, relations: ['user', 'exercises'], });
         }
 
         @Mutation(() => Workout)
