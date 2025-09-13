@@ -2,7 +2,7 @@ import { Resolver, Query, Mutation, Arg, Int } from 'type-graphql'
 import { User, Workout, Exercise } from '../../entities';
 import { AppDataSource } from '../../data-source';
 import { } from '../../entities';
-import { CreateWorkoutInput } from '../inputs/workout/CreateWorkoutInput';
+import { WorkoutInput } from '../inputs/workout/WorkoutInput';
 
 @Resolver(() => Workout)
 export class WorkoutResolver {
@@ -25,7 +25,7 @@ export class WorkoutResolver {
 
         @Mutation(() => Workout)
         async createWorkout(
-                @Arg("input") input: CreateWorkoutInput
+                @Arg("input") input: WorkoutInput
         ): Promise<Workout> {
 
 
@@ -52,6 +52,49 @@ export class WorkoutResolver {
                 workout.exercises = exerciseEntities
 
                 return await this.workoutRepo.save(workout)
+        }
+
+        @Mutation(() => Workout)
+        async editWorkout(
+                @Arg("id") id: number,
+                @Arg("input") input: WorkoutInput
+        ): Promise<Workout> {
+
+                const { startTime, endTime, type, userId, exercises } = input;
+
+                const workout = await this.workoutRepo.findOne({
+                        where: { id },
+                        relations: ["exercises", "user"],
+                });
+
+                if (!workout) {
+                        throw new Error("Workout not found");
+                }
+
+                const user = await this.userRepo.findOneBy({ id: userId });
+                if (!user) {
+                        throw new Error("User not found");
+                }
+
+                // Update workout fields
+                workout.startTime = startTime;
+                workout.endTime = endTime;
+                workout.type = type;
+                workout.user = user;
+
+                // Remove old exercises
+                await this.exerciseRepo.remove(workout.exercises);
+
+                // Add new exercises
+                const updatedExercises = exercises.map((exInput) => {
+                        const exercise = this.exerciseRepo.create(exInput);
+                        exercise.workout = workout;
+                        return exercise;
+                });
+
+                workout.exercises = updatedExercises;
+
+                return await this.workoutRepo.save(workout);
         }
 
         @Mutation(() => Workout)
