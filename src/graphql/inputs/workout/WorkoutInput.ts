@@ -3,8 +3,9 @@ import { GraphQLJSONObject } from "graphql-scalars";
 import { Field, GraphQLISODateTime, InputType, Int } from "type-graphql";
 import { ExerciseInput } from "../exercise/ExerciseInput";
 
+
 @InputType()
-export class CreateWorkoutInput {
+export class WorkoutInput {
         @Field(() => GraphQLISODateTime)
         startTime!: Date;
 
