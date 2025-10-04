@@ -100,7 +100,7 @@ export class WorkoutResolver {
         @Mutation(() => Workout)
         async deleteWorkout(@Arg('id') id: number): Promise<Workout> {
 
-                const toBeDeleted = await this.workoutRepo.findOne({ where: { id } });
+                const toBeDeleted = await this.workoutRepo.findOne({ where: { id }, relations: ["exercises"], });
                 if (!toBeDeleted) {
                         throw new Error('Workout not found')
                 }
