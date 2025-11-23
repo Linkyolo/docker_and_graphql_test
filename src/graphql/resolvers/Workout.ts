@@ -83,7 +83,10 @@ export class WorkoutResolver {
                 workout.user = user;
 
                 // Remove old exercises
-                await this.exerciseRepo.remove(workout.exercises);
+
+                if (workout.exercises?.length) {
+                        await this.exerciseRepo.remove(workout.exercises);
+                }
 
                 // Add new exercises
                 const updatedExercises = exercises.map((exInput) => {
