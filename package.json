@@ -6,7 +6,8 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "migration:run": "typeorm migration:run -d dist/data-source.js",
-    "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate src/migrations/AddNameToExercise -d src/data-source.ts"
+    "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate src/migrations/AddNameToExercise -d src/data-source.ts",
+    "migration:revert":"ts-node ./node_modules/typeorm/cli.js migration:revert -d src/data-source.ts"
   },
   "dependencies": {
     "apollo-server": "^3.13.0",
