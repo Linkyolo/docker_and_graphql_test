@@ -9,6 +9,10 @@ export class AddNameToExercise1763658343746 implements MigrationInterface {
         await queryRunner.query(`CREATE TABLE "user" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
         await queryRunner.query(`ALTER TABLE "exercise" ADD CONSTRAINT "FK_e0d55aed97abd4c9a3df6ab2695" FOREIGN KEY ("workoutId") REFERENCES "workout"("id") ON DELETE CASCADE ON UPDATE NO ACTION`);
         await queryRunner.query(`ALTER TABLE "workout" ADD CONSTRAINT "FK_5c6e4714ac75eab49d2009f956c" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION`);
+        await queryRunner.query(`
+                INSERT INTO "user" ("name")
+                VALUES ('SuperAdmin');
+            `);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

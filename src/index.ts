@@ -11,8 +11,6 @@ import { WorkoutResolver } from "./graphql/resolvers/Workout";
 
 async function main() {
 
-
-
         await AppDataSource.initialize()
 
         const schema = await buildSchema({
