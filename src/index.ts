@@ -1,8 +1,6 @@
 import "reflect-metadata";
-import { DataSource } from "typeorm";
 import { ApolloServer, gql } from "apollo-server";
 import * as dotenv from "dotenv";
-import { User, Workout } from './entities'
 dotenv.config();
 import { AppDataSource } from "./data-source";
 import { UserResolver } from "./graphql/resolvers/User";
@@ -10,8 +8,6 @@ import { buildSchema } from "type-graphql";
 import { WorkoutResolver } from "./graphql/resolvers/Workout";
 
 async function main() {
-
-
 
         await AppDataSource.initialize()
 
@@ -25,4 +21,5 @@ async function main() {
         console.log(`🚀 Server ready at ${url}`);
 
 }
+
 main().catch((err) => { console.error("Error starting server", err) })

@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
         logging: true,
         entities: [
                 isCompiled
-                        ? path.join(__dirname, "entity/**/*.js")  // Production JS files in 'dist' folder
+                        ? path.join(__dirname, "entities/**/*.js")  // Production JS files in 'dist' folder
                         : path.join(__dirname, "../src/entities/**/*.ts"),  // Development TS files in 'src' folder
         ],
         migrations: [
