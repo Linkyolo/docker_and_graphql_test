@@ -6,8 +6,12 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "migration:run": "dotenv -e .env ts-node ./node_modules/typeorm/cli.js -- migration:run -d src/data-source.ts",
-  "migration:revert": "dotenv -e .env ts-node ./node_modules/typeorm/cli.js -- migration:revert -d src/data-source.ts",
-    "migration:generate": "dotenv -e .env ts-node ./node_modules/typeorm/cli.js -- migration:generate -n"
+    "migration:revert": "dotenv -e .env ts-node ./node_modules/typeorm/cli.js -- migration:revert -d src/data-source.ts",
+    "migration:generate": "dotenv -e .env ts-node ./node_modules/typeorm/cli.js -- migration:generate -n",
+    "test": "DB_PORT=5432 DB_NAME=postgres_test jest",
+    "test:watch": "DB_PORT=5432 DB_NAME=postgres_test jest --watch",
+    "test:coverage": "DB_PORT=5432 DB_NAME=postgres_test jest --coverage",
+    "test:verbose": "DB_PORT=5433 DB_NAME=postgres_test jest --verbose"
   },
   "dependencies": {
     "apollo-server": "^3.13.0",
@@ -21,8 +25,11 @@
     "type-graphql": "^2.0.0-rc.2"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.13",
     "dotenv-cli": "^11.0.0",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typeorm": "^0.3.25",

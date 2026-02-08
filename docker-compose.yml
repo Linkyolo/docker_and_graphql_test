@@ -1,5 +1,4 @@
 version: "3.8"
-
 services:
   graphql-server:
     build: .
@@ -7,7 +6,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/app  # Mounting the app directory
+      - .:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
@@ -18,8 +17,8 @@ services:
       - DB_NAME=postgres
     depends_on:
       - postgres
-    command: "npm run dev"  
-
+    command: "npm run dev"
+    
   postgres:
     image: postgres:15
     container_name: postgres-db
@@ -32,6 +31,7 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./init-test-db.sh:/docker-entrypoint-initdb.d/init-test-db.sh  # <-- Script di inizializzazione
 
 volumes:
   pgdata:
